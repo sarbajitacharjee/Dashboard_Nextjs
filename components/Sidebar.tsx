@@ -1,6 +1,10 @@
 "use client"
 
-import { motion, AnimatePresence } from "framer-motion"
+import { useState } from "react"
+
+import Link from "next/link"
+
+import { usePathname } from "next/navigation"
 
 import {
 
@@ -13,31 +17,38 @@ Settings
 
 } from "lucide-react"
 
-import { useState } from "react"
+import {
+AnimatePresence,
+motion
+} from "framer-motion"
 
 
 
-const navigationItems=[
+const navigationItems = [
 
 {
 name:"Home",
+href:"/",
 icon:Home
 },
 
 {
 name:"Courses",
+href:"/courses",
 icon:BookOpen
 },
 
 {
 name:"Analytics",
+href:"#",
 icon:BarChart3
 },
 
 {
 name:"Settings",
+href:"#",
 icon:Settings
-}
+},
 
 ]
 
@@ -45,10 +56,10 @@ icon:Settings
 
 export default function Sidebar(){
 
-const [active,setActive]=
-useState("Home")
+const pathname =
+usePathname()
 
-const [isOpen,setIsOpen]=
+const [isOpen,setIsOpen] =
 useState(false)
 
 return(
@@ -66,16 +77,18 @@ setIsOpen(true)
 }
 
 className="
-md:hidden
 fixed
 top-5
 left-5
-z-50
+z-[100]
 rounded-xl
 border
 border-zinc-800
 bg-zinc-900
 p-3
+text-white
+shadow-lg
+md:hidden
 "
 
 >
@@ -95,6 +108,8 @@ p-3
 {isOpen && (
 
 <>
+
+{/* OVERLAY */}
 
 <motion.div
 
@@ -117,13 +132,16 @@ setIsOpen(false)
 className="
 fixed
 inset-0
-z-40
-bg-black/60
+z-[90]
+bg-black/70
 backdrop-blur-sm
+md:hidden
 "
 />
 
 
+
+{/* SIDEBAR PANEL */}
 
 <motion.aside
 
@@ -140,9 +158,11 @@ x:-320
 }}
 
 transition={{
+
 type:"spring",
-stiffness:250,
+stiffness:260,
 damping:28
+
 }}
 
 className="
@@ -150,11 +170,11 @@ fixed
 top-0
 left-0
 bottom-0
-z-50
+z-[95]
 w-[280px]
+bg-zinc-950
 border-r
 border-zinc-800
-bg-zinc-950
 p-6
 md:hidden
 "
@@ -174,6 +194,7 @@ mb-10
 className="
 text-2xl
 font-bold
+text-white
 "
 >
 
@@ -189,11 +210,13 @@ setIsOpen(false)
 
 >
 
-<X/>
+<X className="text-white"/>
 
 </button>
 
 </div>
+
+
 
 <nav>
 
@@ -201,16 +224,22 @@ setIsOpen(false)
 
 {navigationItems.map((item)=>{
 
-const Icon=item.icon
+const Icon =
+item.icon
+
+const isActive =
+pathname===item.href
 
 return(
 
 <li key={item.name}>
 
-<button
+<Link
+
+href={item.href}
 
 onClick={()=>
-setActive(item.name)
+setIsOpen(false)
 }
 
 className="
@@ -218,19 +247,19 @@ relative
 flex
 items-center
 gap-4
-w-full
 rounded-xl
 px-4
 py-3
+overflow-hidden
 "
 
 >
 
-{active===item.name && (
+{isActive && (
 
 <motion.div
 
-layoutId="active-nav"
+layoutId="active-mobile"
 
 className="
 absolute
@@ -245,12 +274,19 @@ to-purple-500/20
 
 )}
 
-<Icon className="relative z-10"/>
+<Icon
+className="
+relative
+z-10
+text-white
+"
+/>
 
 <span
 className="
 relative
 z-10
+text-white
 "
 >
 
@@ -258,7 +294,7 @@ z-10
 
 </span>
 
-</button>
+</Link>
 
 </li>
 
@@ -317,17 +353,19 @@ Dashboard
 
 {navigationItems.map((item)=>{
 
-const Icon=item.icon
+const Icon =
+item.icon
+
+const isActive =
+pathname===item.href
 
 return(
 
 <li key={item.name}>
 
-<button
+<Link
 
-onClick={()=>
-setActive(item.name)
-}
+href={item.href}
 
 className="
 relative
@@ -336,19 +374,19 @@ items-center
 justify-center
 xl:justify-start
 gap-3
-w-full
 rounded-xl
 px-4
 py-3
+overflow-hidden
 "
 
 >
 
-{active===item.name && (
+{isActive && (
 
 <motion.div
 
-layoutId="active-nav"
+layoutId="active-desktop"
 
 className="
 absolute
@@ -372,14 +410,13 @@ xl:block
 relative
 z-10
 "
-
 >
 
 {item.name}
 
 </span>
 
-</button>
+</Link>
 
 </li>
 

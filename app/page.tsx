@@ -1,106 +1,173 @@
 import Sidebar from "@/components/Sidebar"
 import HeroTile from "@/components/HeroTile"
+import CourseCard from "@/components/CourseCard"
 import ActivityTile from "@/components/ActivityTile"
-import CourseCard from "@/components/CourseCard";
 
-import { supabase }
-from "@/lib/supabase"
+import { supabase } from "@/lib/supabase"
 
-export default async function Home(){
+// ======================================
+// DASHBOARD PAGE
+// SERVER COMPONENT
+// Fetches live course data from Supabase
+// ======================================
 
-const {data,error}
+export default async function Home() {
 
-=
+  // --------------------------------------
+  // FETCH COURSE DATA FROM SUPABASE
+  // --------------------------------------
 
-await supabase
+  const { data: courses, error } = await supabase
 
-.from("courses")
+    .from("courses")
 
-.select("*")
+    .select("*")
 
-.order(
-"created_at",
-{
-ascending:false
-}
-)
+    .order(
+      "created_at",
+      {
+        ascending: false,
+      }
+    )
 
-if(error){
+  // --------------------------------------
+  // ERROR HANDLING
+  // --------------------------------------
 
-throw new Error(
-"Supabase fetch failed"
-)
+  if (error) {
 
-}
+    throw new Error(
+      "Failed to fetch Supabase courses"
+    )
 
-return(
+  }
 
-<main
-className="
-min-h-screen
-bg-black
-text-white
-p-6
-"
->
+  return (
 
-<section
-className="
-max-w-[1600px]
-mx-auto
-grid
-grid-cols-1
-md:grid-cols-[90px_1fr]
-xl:grid-cols-[260px_1fr]
-gap-6
-"
->
+    <main
+      className="
+      min-h-screen
+      bg-black
+      text-white
+      p-6
+      "
+    >
 
-<Sidebar/>
+      {/* ====================================== */}
+      {/* BACKGROUND GLOW EFFECT */}
+      {/* ====================================== */}
 
-<main>
+      <div
+        className="
+        fixed
+        inset-0
+        -z-10
+        bg-[radial-gradient(circle_at_top_left,#06b6d422,transparent_40%),radial-gradient(circle_at_bottom_right,#9333ea22,transparent_40%)]
+        "
+      />
 
-<HeroTile/>
+      {/* ====================================== */}
+      {/* DASHBOARD LAYOUT */}
+      {/* ====================================== */}
 
-<section
-className="
-grid
-grid-cols-1
-md:grid-cols-2
-xl:grid-cols-3
-gap-6
-mb-6
-"
->
+      <section
+        className="
+        max-w-[1600px]
+        mx-auto
+        grid
+        grid-cols-1
+        md:grid-cols-[90px_1fr]
+        xl:grid-cols-[260px_1fr]
+        gap-6
+        "
+      >
 
-{data?.map((course)=>(
+        {/* SIDEBAR */}
 
-<CourseCard
+        <Sidebar />
 
-key={course.id}
+        {/* MAIN CONTENT */}
 
-title={course.title}
+        <main>
 
-progress={course.progress}
+          {/* HERO TILE */}
 
-icon_name={course.icon_name}
+          <HeroTile />
 
-/>
+          {/* ====================================== */}
+          {/* SUPABASE COURSE DATA SECTION */}
+          {/* ====================================== */}
 
-))}
+          <section
+            className="
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            xl:grid-cols-3
+            gap-6
+            mb-6
+            "
+          >
 
-</section>
+            {courses?.map((course) => (
 
-<ActivityTile/>
+              <CourseCard
 
-</main>
+                key={course.id}
 
-</section>
+                id={course.id}
 
+                title={course.title}
 
+                progress={course.progress}
 
-</main>
+                icon_name={course.icon_name}
 
-)
+              />
+
+            ))}
+
+          </section>
+
+          {/* ====================================== */}
+          {/* DEBUG VIEW (OPTIONAL)
+             Shows raw fetched data visually
+          */}
+          {/* ====================================== */}
+
+          {/*
+
+          <pre
+            className="
+            mb-6
+            rounded-2xl
+            bg-zinc-900
+            p-5
+            text-xs
+            overflow-x-auto
+            "
+          >
+
+            {JSON.stringify(
+              courses,
+              null,
+              2
+            )}
+
+          </pre>
+
+          */}
+
+          {/* ACTIVITY GRAPH */}
+
+          <ActivityTile />
+
+        </main>
+
+      </section>
+
+    </main>
+
+  )
 
 }
