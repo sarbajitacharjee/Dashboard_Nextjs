@@ -37,7 +37,7 @@ px-6
 py-4
 "
 >
-
+{/* 
 {items.map((Icon,index)=>(
 
 <Icon
@@ -51,7 +51,7 @@ text-zinc-300
 
 />
 
-))}
+))} */}
 
 </nav>
 

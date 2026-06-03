@@ -1,19 +1,29 @@
 import Sidebar from "@/components/Sidebar"
 import HeroTile from "@/components/HeroTile"
 import ActivityTile from "@/components/ActivityTile"
-import CourseCard from "@/components/CourseCard"
-import BentoGrid from "@/components/BentoGrid"
-import MobileNav from "@/components/MobileNav"
+import CourseCard from "@/components/CourseCard";
 
-import { supabase } from "@/lib/supabase"
+import { supabase }
+from "@/lib/supabase"
 
 export default async function Home(){
 
-const {data,error}=await supabase
+const {data,error}
+
+=
+
+await supabase
 
 .from("courses")
 
 .select("*")
+
+.order(
+"created_at",
+{
+ascending:false
+}
+)
 
 if(error){
 
@@ -34,34 +44,19 @@ p-6
 "
 >
 
-<div
-className="
-fixed
-inset-0
--z-10
-bg-[radial-gradient(circle_at_top_left,#06b6d422,transparent_40%),radial-gradient(circle_at_bottom_right,#9333ea22,transparent_40%)]
-"
-/>
-
 <section
 className="
 max-w-[1600px]
 mx-auto
 grid
 grid-cols-1
-lg:grid-cols-[90px_1fr]
+md:grid-cols-[90px_1fr]
 xl:grid-cols-[260px_1fr]
 gap-6
 "
 >
 
-<div className="hidden lg:block">
-
 <Sidebar/>
-
-</div>
-
-<BentoGrid>
 
 <main>
 
@@ -100,11 +95,9 @@ icon_name={course.icon_name}
 
 </main>
 
-</BentoGrid>
-
 </section>
 
-<MobileNav/>
+
 
 </main>
 
