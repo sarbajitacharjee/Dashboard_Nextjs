@@ -1,167 +1,200 @@
 "use client"
 
 import { motion } from "framer-motion"
+
 import { iconMap } from "@/lib/icons"
 
-interface Props{
-
-id:string
-title:string
-progress:number
-icon_name:string
-
+interface CourseCardProps {
+  id: string
+  title: string
+  progress: number
+  icon_name: string
 }
 
 export default function CourseCard({
+  id,
+  title,
+  progress,
+  icon_name,
+}: CourseCardProps) {
 
-id,
-title,
-progress,
-icon_name
+  const Icon =
+    iconMap[
+      icon_name as keyof typeof iconMap
+    ]
 
-}:Props){
+  return (
 
-const Icon=
+    <motion.article
 
-iconMap[
-icon_name as keyof typeof iconMap
-]
+      initial={{
+        opacity: 0,
+        y: 20,
+      }}
 
-return(
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
 
-<motion.article
+      whileHover={{
+        scale: 1.02,
+      }}
 
-initial={{
-opacity:0,
-y:20
-}}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+      }}
 
-animate={{
-opacity:1,
-y:0
-}}
+      className="
+      group
+      relative
+      overflow-hidden
+      rounded-3xl
+      border
+      border-zinc-800
+      bg-zinc-900/80
+      backdrop-blur-xl
+      p-6
+      hover:border-cyan-500/30
+      hover:shadow-[0_0_30px_rgba(34,211,238,0.12)]
+      "
+    >
 
-whileHover={{
-scale:1.02
-}}
+      {/* ====================================== */}
+      {/* HOVER GRADIENT LAYER */}
+      {/* ====================================== */}
 
-transition={{
+      <div
+        className="
+        absolute
+        inset-0
+        opacity-0
+        transition-all
+        duration-300
+        group-hover:opacity-100
+        bg-gradient-to-br
+        from-cyan-500/10
+        via-transparent
+        to-purple-500/10
+        pointer-events-none
+        "
+      />
 
-type:"spring",
-stiffness:300,
-damping:20
+      {/* ====================================== */}
+      {/* CONTENT */}
+      {/* ====================================== */}
 
-}}
+      <div className="relative z-10">
 
-className="
-relative
-overflow-hidden
-rounded-3xl
-border
-border-zinc-800
-bg-zinc-900/80
-p-6
-"
+        {/* COURSE ID */}
 
->
+        <p
+          className="
+          text-xs
+          uppercase
+          tracking-wider
+          text-cyan-400
+          mb-4
+          "
+        >
 
-<div className="relative z-10">
+          Course ID:
+          {" "}
+          {id.slice(0, 8)}
 
-{/* COURSE ID */}
+        </p>
 
-<p
-className="
-text-xs
-uppercase
-tracking-wider
-text-cyan-400
-mb-4
-"
->
+        {/* ICON */}
 
-Course ID:
-{id.slice(0,8)}
+        {Icon && (
 
-</p>
+          <Icon
+            className="
+            mb-5
+            text-cyan-400
+            size-8
+            "
+          />
 
-{/* ICON */}
+        )}
 
-<Icon
-className="
-mb-5
-text-cyan-400
-"
-/>
+        {/* TITLE */}
 
-{/* TITLE */}
+        <h2
+          className="
+          text-xl
+          font-bold
+          leading-snug
+          "
+        >
 
-<h2
-className="
-text-xl
-font-bold
-leading-snug
-"
->
+          {title}
 
-{title}
+        </h2>
 
-</h2>
+        {/* PROGRESS TEXT */}
 
-{/* PROGRESS */}
+        <p
+          className="
+          mt-3
+          text-zinc-400
+          "
+        >
 
-<p
-className="
-mt-3
-text-zinc-400
-"
->
+          Progress:
+          {" "}
+          {progress}%
 
-Progress:
-{progress}%
+        </p>
 
-</p>
+        {/* PROGRESS BAR */}
 
-{/* BAR */}
+        <div
+          className="
+          mt-6
+          h-2
+          rounded-full
+          bg-zinc-800
+          overflow-hidden
+          "
+        >
 
-<div
-className="
-mt-6
-h-2
-rounded-full
-bg-zinc-800
-overflow-hidden
-"
->
+          <motion.div
 
-<motion.div
+            initial={{
+              scaleX: 0,
+            }}
 
-initial={{
-width:0
-}}
+            animate={{
+              scaleX: progress / 100,
+            }}
 
-animate={{
-width:`${progress}%`
-}}
+            transition={{
+              duration: 1,
+            }}
 
-transition={{
-duration:1
-}}
+            style={{
+              originX: 0,
+            }}
 
-className="
-h-full
-rounded-full
-bg-gradient-to-r
-from-cyan-400
-to-purple-500
-"
-/>
+            className="
+            h-full
+            w-full
+            rounded-full
+            bg-gradient-to-r
+            from-cyan-400
+            to-purple-500
+            "
+          />
 
-</div>
+        </div>
 
-</div>
+      </div>
 
-</motion.article>
+    </motion.article>
 
-)
+  )
 
 }
